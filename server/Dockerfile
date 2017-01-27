@@ -19,6 +19,19 @@ RUN sed -i 's/\(logger.handlers=CONSOLE\),FILE/\1/' keycloak/standalone/configur
 
 ENV JBOSS_HOME /opt/jboss/keycloak
 
+ADD https://circleci.com/api/v1/project/redhat-ipaas/keycloak-customizations/latest/artifacts/0/\$CIRCLE_ARTIFACTS/openshift-provider.jar /opt/jboss/keycloak/providers/
+ADD https://circleci.com/api/v1/project/redhat-ipaas/keycloak-customizations/latest/artifacts/0/\$CIRCLE_ARTIFACTS/ipaas-theme.jar /opt/jboss/keycloak/providers/
+RUN mkdir -p /opt/jboss/keycloak/themes/keycloak/admin/resources/partials/ && \
+    cd /opt/jboss/keycloak/themes/keycloak/admin/resources/partials/ && \
+    unzip -j /opt/jboss/keycloak/providers/ipaas-theme.jar theme/ipaas/admin/resources/partials/realm-identity-provider-openshift.html theme/ipaas/admin/resources/partials/realm-identity-provider-openshift-ext.html && \
+    mkdir -p /opt/jboss/keycloak/themes/keycloak/admin/messages/ && \
+    cd /opt/jboss/keycloak/themes/keycloak/admin/messages/ && \
+    unzip -j /opt/jboss/keycloak/providers/ipaas-theme.jar theme/ipaas/admin/messages/admin-messages_en.properties
+RUN cd /opt/jboss/keycloak/themes/ && \
+    unzip /opt/jboss/keycloak/providers/ipaas-theme.jar && \
+    mv theme/ipaas . && \
+    rm -rf theme META-INF
+
 RUN mkdir $JBOSS_HOME/standalone/{data,log} && \
     chown -R jboss:root $JBOSS_HOME && \
     find $JBOSS_HOME -type d -exec chmod 770 {} \; && \
