@@ -26,7 +26,8 @@ RUN mkdir -p /opt/jboss/keycloak/themes/keycloak/admin/resources/partials/ && \
     unzip -j /opt/jboss/keycloak/providers/ipaas-theme.jar theme/ipaas/admin/resources/partials/realm-identity-provider-openshift.html theme/ipaas/admin/resources/partials/realm-identity-provider-openshift-ext.html && \
     mkdir -p /opt/jboss/keycloak/themes/keycloak/admin/messages/ && \
     cd /opt/jboss/keycloak/themes/keycloak/admin/messages/ && \
-    unzip -j /opt/jboss/keycloak/providers/ipaas-theme.jar theme/ipaas/admin/messages/admin-messages_en.properties
+    unzip -j /opt/jboss/keycloak/providers/ipaas-theme.jar theme/ipaas/admin/messages/admin-messages_en.properties && \
+    chmod g+rwX /opt/jboss/keycloak/providers/*.jar
 RUN cd /opt/jboss/keycloak/themes/ && \
     unzip /opt/jboss/keycloak/providers/ipaas-theme.jar && \
     mv theme/ipaas . && \
